@@ -11,13 +11,14 @@ interface DataIssue {
   deleteIssue: () => void;
 }
 
-export default function Issue({ issues,deleteIssue }: DataIssue) {
+export default function Issue({ issues, deleteIssue }: DataIssue) {
  
   const handleDeleteIssue =() => {
-        deleteIssue();
+     deleteIssue();
   }
 
   return (
+    issues.length > 0 && (
     <Card style={{ backgroundColor: "transparent" }}>
       {issues.map((item) => (
           <Card.Body key={item.id} style={{ border: "black 1px solid" }}>
@@ -27,5 +28,6 @@ export default function Issue({ issues,deleteIssue }: DataIssue) {
       ))}
         <Button variant="danger" onClick={handleDeleteIssue}>Delete issues</Button>
     </Card>
-  );
+    )
+);
 }

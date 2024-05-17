@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { GitTask } from "../api/apiGitTask";
 import Issue from "./Issue";
+
+
 
 interface ColumnIssuesProps {
   dataIssue: GitTask[];
@@ -9,9 +11,15 @@ interface ColumnIssuesProps {
 
 export default function ColumnIssues({ dataIssue }: ColumnIssuesProps) {
   const [deleteDataIssue, setDeleteDataIssue] = useState<GitTask[]>(dataIssue);
+
   const deleteIssue = () => {
     setDeleteDataIssue([]);
-  }; 
+  };
+
+  useEffect(() => {
+    console.log(deleteDataIssue);
+  }, [deleteDataIssue]);
+  
   return (
     <Container>
       <Row className="justify-content-around align-items-center">
