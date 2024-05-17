@@ -1,17 +1,13 @@
 import { Container, Form, Button } from "react-bootstrap";
-import { useState, useEffect } from "react";
-import axios from "axios";
-import ColumnIssues from "./ColumnIssues";
+import { useState } from "react";
+import { getDataGitTask, GitTask } from "../api/apiGitTask";
 
- export interface Issue {
-  number: string | number;
-  title: string;
-  body: string;
+interface InputApiProps {
+  setDataIssue: React.Dispatch<React.SetStateAction<GitTask[]>>;
 }
 
-export default function InputApi() {
+export default function InputApi({ setDataIssue }: InputApiProps) {
   const [inputApi, setInputApi] = useState<string>("");
-  const [responseData, setResponseData] = useState<Issue[]>([]);
   const [error, setError] = useState<string>("");
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,30 +16,26 @@ export default function InputApi() {
   };
   const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    await fetchData();
+    await fetchGitTask();
   };
-  const fetchData = async () => {
+
+  const fetchGitTask = async () => {
     try {
-      const response = await axios.get<Issue[]>(inputApi);
-      setResponseData(response.data);
-      console.log(response.data);
+      const data = await getDataGitTask(inputApi);
+      setDataIssue(data);
+      console.log(data);
     } catch (error) {
       setError("Error fetching data. Please check the URL and try again.");
     }
   };
-  // useEffect(() => {
-  //   console.log(fetchData());
-  // }, []);
 
   if (error) {
     return <div>{error}</div>;
   }
+
   return (
     <>
-      <Container
-        className="d-flex justify-content-center align-items-center"
-        style={{ height: "15vh" }}
-        >
+      <Container className="d-flex justify-content-center align-items-center" style={{ height: "15vh" }}>
         <Form.Control
           type="email"
           onChange={handleInputChange}
@@ -55,7 +47,6 @@ export default function InputApi() {
           Load
         </Button>
       </Container>
-      <ColumnIssues issues={[...responseData]}/>
     </>
   );
 }

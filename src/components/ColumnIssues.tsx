@@ -1,88 +1,36 @@
-import { Container, Row, Col, Button } from "react-bootstrap";
-import { Issue } from "./InputApi";
 import { useState } from "react";
-import { useDispatch,useSelector } from "react-redux";
-import { moveItem } from "../features/slices/issuesSlice";
-
+import { Container, Row, Col } from "react-bootstrap";
+import { GitTask } from "../api/apiGitTask";
+import Issue from "./Issue";
 
 interface ColumnIssuesProps {
-  issues: Issue[];
+  dataIssue: GitTask[];
 }
 
-export default function ColumnIssues({ issues }: ColumnIssuesProps) {
-  const [deleteIssue, setDeleteIssue] = useState<Issue[]>(issues);
-  const dispatch=useDispatch();
-  // const issuesList = useSelector((state) => state.issues);
-
-  const handleDeleteIssue = () => {
-    setDeleteIssue([]);
-  };
-
+export default function ColumnIssues({ dataIssue }: ColumnIssuesProps) {
+  const [deleteDataIssue, setDeleteDataIssue] = useState<GitTask[]>(dataIssue);
+  const deleteIssue = () => {
+    setDeleteDataIssue([]);
+  }; 
   return (
     <Container>
       <Row className="justify-content-around align-items-center">
-        <Col
-          sm={4}
-          style={{
-            textAlign: "center",
-            width: "300px",
-            height: "400px",
-            backgroundColor: "#f8d7da",
-            padding: "20px",
-            borderRadius: "8px",
-            overflow: "auto",
-          }}
+        <Col sm={4}
+          className="d-flex flex-column align-items-center bg-danger bg-opacity-25 p-3 rounded overflow-auto"
+          style={{ textAlign:'center',height: "400px",width:'300px'}}
         >
           <h3>Issues</h3>
-          {issues.length > 0 && (
-            <ul>
-              {issues.map((issue, index) => (
-                <div
-                  className="list_issue"
-                  key={index}
-                  style={{
-                    listStyle: "none",
-                    margin: "15px",
-                    border: "1px solid #ccc",
-                    padding: "10px",
-                    borderRadius: "8px",
-                  }}
-                >
-                  <li key={`title-${index}`} style={{ color: "darkgoldenrod" }}>
-                    {issue.title}
-                  </li>
-                  <li key={`body-${index}`} style={{ color: "black" }}>
-                    {issue.body}
-                  </li>
-                </div>
-              ))}
-              <Button onClick={handleDeleteIssue}>Delete issues</Button>
-            </ul>
-          )}
+          <Issue issues={dataIssue} deleteIssue={deleteIssue}/>
         </Col>
-        <Col
-          sm={4}
-          style={{
-            textAlign: "center",
-            width: "300px",
-            height: "400px",
-            backgroundColor: "#d4edda",
-            padding: "20px",
-            borderRadius: "8px",
-          }}
+        <Col sm={4}
+          className="d-flex flex-column align-items-center bg-success bg-opacity-25 p-3 rounded"
+          style={{ textAlign:'center',height: "400px",width:'300px'}}
         >
           <h3>In process</h3>
         </Col>
-        <Col
-          sm={4}
-          style={{
-            textAlign: "center",
-            width: "300px",
-            height: "400px",
-            backgroundColor: "#cce5ff",
-            padding: "20px",
-            borderRadius: "8px",
-          }}
+        <Col sm={4}
+          className="d-flex flex-column align-items-center bg-primary bg-opacity-25 p-3 rounded"
+          style={{ textAlign:'center',height: "400px",width:'300px'}}
         >
           <h3>Done</h3>
         </Col>
