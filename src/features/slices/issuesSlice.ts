@@ -1,19 +1,37 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, } from '@reduxjs/toolkit';
 
-const slice = createSlice({
-  name: 'moveItem',
-  initialState:[],
+interface PropsIssue {
+  id: number;
+  title: string;
+  body: string;
+  status: string;
+}
+
+interface TasksState {
+  issues: PropsIssue[];
+}
+
+const initialState: TasksState = {
+  issues: [],
+};
+
+const issuesSlice = createSlice({
+  name: 'gitIssue',
+  initialState,
   reducers: {
-    moveItem: (state, action: PayloadAction<{ number: string | number; title: string; body: string }>) => {
-      // const { number, title, body } = action.payload;
-      // const index = state.findIndex(issue => issue.number === number);
-      // if(index !== -1) {
-      //   state[index].title = title;
-      //   state[index].body = body;
-      // }
+    setIssues(state, action: PayloadAction<PropsIssue[]>) {
+      state.issues = action.payload;
+    },
+    updateIssueStatus(state, action: PayloadAction<{ id: number; status: string }>) {
+      const { id, status } = action.payload;
+      const issue = state.issues.find(issue => issue.id === id);
+      if (issue) {
+        issue.status = status;
+      }
     },
   },
 });
 
-export const { moveItem } = slice.actions;
-export default slice.reducer;
+export const { setIssues, updateIssueStatus } = issuesSlice.actions;
+export default issuesSlice.reducer;
+

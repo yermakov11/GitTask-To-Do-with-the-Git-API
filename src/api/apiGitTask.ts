@@ -4,6 +4,7 @@ export interface GitTask{
     id: number;
     title: string;
     body: string;
+    status: string;
 }
 
 export async function getDataGitTask(url_git:string): Promise<GitTask[]>{
