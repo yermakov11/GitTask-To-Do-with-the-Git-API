@@ -7,7 +7,7 @@ export default function HomePage() {
   return (
     <div>
       <InputApi setDataIssue={setDataApi}/>
-      <ColumnIssues dataIssue={dataApi}/>
+      <ColumnIssues issues={dataApi}/>
     </div>
   );
 }
