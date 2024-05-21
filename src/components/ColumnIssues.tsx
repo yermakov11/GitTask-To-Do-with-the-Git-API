@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../features/store";
 import { setIssues, updateIssueStatus } from "../features/slices/issuesSlice";
@@ -25,18 +25,22 @@ export default function ColumnIssues({issues}: ColumnIssuesProps) {
     dispatch(setIssues(issues));
   }, [issues, dispatch]);
 
-  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, id: number) => {
-    e.dataTransfer.setData("text/plain", id.toString());
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, status: string) => {
+    e.dataTransfer.setData("text/plain", status);
+    console.log("Drag start:", status); 
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>, status: string) => {
     e.preventDefault();
-    const id = parseInt(e.dataTransfer.getData("text/plain"));
-    dispatch(updateIssueStatus({ id, status }));
+    const issueStatus = e.dataTransfer.getData("text/plain");
+    const id = parseInt(issueStatus); 
+    dispatch(updateIssueStatus({ id, status })); 
+    console.log("Drop:", id, status);
   };
-
+  
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    console.log("Drag over");
   };
 
   const renderIssues = (status: string) => {
@@ -46,8 +50,7 @@ export default function ColumnIssues({issues}: ColumnIssuesProps) {
         <Card
           key={issue.id}
           draggable
-          onDragStart={(e: React.DragEvent<HTMLDivElement>) => handleDragStart(e, issue.id)}
-          className="m-2"
+          onDragStart={(e: React.DragEvent<HTMLDivElement>) => handleDragStart(e, issue.status)} 
           style={{ border: "black 1px solid" }}
         >
           <Card.Body>
@@ -63,7 +66,8 @@ export default function ColumnIssues({issues}: ColumnIssuesProps) {
       <Row className="justify-content-around align-items-center">
         <Col
           sm={4}
-          onDrop={(e: React.DragEvent<HTMLDivElement>)=>handleDrop(e, "todo")}
+          draggable
+          onDragStart={(e: React.DragEvent<HTMLDivElement>) => handleDragStart(e, "todo")} 
           className="d-flex flex-column align-items-center bg-danger bg-opacity-25 p-3 rounded overflow-auto"
           style={{ textAlign: "center", height: "400px", width: "300px" }}
         >
@@ -88,7 +92,7 @@ export default function ColumnIssues({issues}: ColumnIssuesProps) {
           style={{ textAlign: "center", height: "400px", width: "300px" }}
         >
           <h3>In process</h3>
-          {renderIssues("in process")}
+          {renderIssues("in-progress")}
         </Col>
         <Col
           sm={4}

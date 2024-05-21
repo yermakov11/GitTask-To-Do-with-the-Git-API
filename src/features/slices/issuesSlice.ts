@@ -34,4 +34,3 @@ const issuesSlice = createSlice({
 
 export const { setIssues, updateIssueStatus } = issuesSlice.actions;
 export default issuesSlice.reducer;
-
